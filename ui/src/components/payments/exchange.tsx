@@ -30,7 +30,6 @@ import metamaskIcon from "@/assets/metamask.png";
 const PK_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 const stripePromise = loadStripe(PK_KEY);
 import { useAccount, useConnect } from "wagmi";
-
 export default function Exchange() {
   const { stripe } = useStripePromiseStore((state) => ({
     stripe: state.stripePromise,
@@ -163,15 +162,15 @@ export default function Exchange() {
                   <div className="flex flex-row gap-2 my-4">
                     <Input
                       className="basis-5/6"
-                      defaultValue={walletAddress}
+                      defaultValue={address}
                       placeholder="Wallet Address"
-                      onChange={() => setWalletAddress(walletAddress)}
+                      onChange={() => setWalletAddress(address ? address : "")}
                     />
                     <div className="p-1/2 rounded-md bg-gradient-to-b from-teal-500/60 to-violet-500/60">
                     <Button
                       variant={"secondary"}
                       size={"icon"}
-                      onClick={() => connect({ connector: connectors[0] })}
+                      onClick={() => connect({ connector:connectors[0]  })}
                     >
                       <img src={metamaskIcon} className="w-5" alt="" />
                     </Button>

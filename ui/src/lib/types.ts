@@ -4,6 +4,7 @@ export interface Project {
   id: number;
   description: string;
   createdAt: Date;
+  appId: string;
 }
 
 export interface SideNavState {

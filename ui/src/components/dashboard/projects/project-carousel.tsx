@@ -23,8 +23,10 @@ import { Project } from "@/lib/types";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function ProjectCarousel(props: { projects: Project[] }) {
+  console.log(props.projects);
   const [selectedIndex, setIndex] = useState(0);
   const selectedProject = props.projects[selectedIndex];
+  console.log(selectedProject);
   const { toast } = useToast();
   // console.log(props.projects);
   return (
@@ -84,15 +86,6 @@ export default function ProjectCarousel(props: { projects: Project[] }) {
                     readOnly
                   />
                 </div>
-                <div>
-                  <Label htmlFor="createdAt">Created At</Label>
-                  <Input
-                    id="createdAt"
-                    value={selectedProject.createdAt.toLocaleDateString()}
-                    readOnly
-                  />
-                </div>
-
                 <div className="flex gap-2 items-end">
                   <div className="flex-1">
                     <Label htmlFor="clientSecret">Client Secret</Label>

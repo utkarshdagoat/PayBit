@@ -18,5 +18,5 @@ export const getKYCStatusAPI = api + "/kyc/status";
 export const DASHBOARD_API = api + '/dashboard/applications'
 
 
-export const MAINNET_PAYMENT_API = api + "/api/make-payment/mainnet";
-export const TESTNET_PAYMENT_API = api + "/api/make-payment/testnet";
+export const MAINNET_PAYMENT_API = api + "/make-payment/mainnet";
+export const TESTNET_PAYMENT_API = api + "/make-payment/testnet";

@@ -45,6 +45,7 @@ export default function SuccessfulPayment() {
 
       if (res.status === 200) {
         setTxHash(res.data.data);
+        console.log(res.data.data)
         setSuccessful(true);
         toast({ description: "USC Should be recived 🚀" });
       }
@@ -76,7 +77,7 @@ export default function SuccessfulPayment() {
             case "succeeded":
               toast({ description: "Payment succeeded! Converting to Crypto" });
               if (callCounter === 0) {
-                await transferCall(paymentIntent.amount / 100);
+                await transferCall(paymentIntent.amount / 1000);
                 setCallCounter(1);
               }
               break;
