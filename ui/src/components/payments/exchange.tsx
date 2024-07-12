@@ -20,22 +20,16 @@ import CheckoutForm from "./stripeCheckout";
 import axios from "axios";
 import InputBoxes from "./inputboxes";
 import { useToast } from "../ui/use-toast";
-import { Window as KeplrWindow } from "@keplr-wallet/types";
-import keplrIcon from "@/assets/keplr-icon.svg";
 import { getKYCStatusAPI } from "@/lib/endpoints";
 import { Link } from "react-router-dom";
 import { useClientSecretStore, useStripePromiseStore } from "@/hooks/useStore";
 import { loadStripe } from "@stripe/stripe-js";
 import { set } from "date-fns";
 import Spinner from "../ui/spinner";
-
+import metamaskIcon from "@/assets/metamask.png";
 const PK_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 const stripePromise = loadStripe(PK_KEY);
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Window extends KeplrWindow {}
-}
+import { useAccount, useConnect } from "wagmi";
 
 export default function Exchange() {
   const { stripe } = useStripePromiseStore((state) => ({
@@ -47,20 +41,8 @@ export default function Exchange() {
   const { toast } = useToast();
   const [walletAddress, setWalletAddress] = useState("");
   const [kycFetcheLoading, setKycFetchedLoading] = useState(false);
-
-  const connectWalletHandle = async () => {
-    const chainId = "akashnet-2";
-    if (!window.keplr) {
-      toast({
-        description: "Please install Keplr wallet to proceed",
-      });
-    } else {
-      await window.keplr.enable(chainId);
-      const address = await window.keplr.getKey(chainId);
-      setWalletAddress(address.bech32Address);
-    }
-  };
-
+  const { address } = useAccount();
+  const { connect, connectors } = useConnect();
   const api = import.meta.env.VITE_BACKEND_URI;
   const [exchangeAmount, setExchangeAmount] = useState(0.0);
   const [UBITAmount, setUBITAmount] = useState(0);
@@ -186,14 +168,13 @@ export default function Exchange() {
                       onChange={() => setWalletAddress(walletAddress)}
                     />
                     <div className="p-1/2 rounded-md bg-gradient-to-b from-teal-500/60 to-violet-500/60">
-                      <Button
-                        variant={"secondary"}
-                        size={"icon"}
-                        className="font-bold bg-transparent"
-                        onClick={connectWalletHandle}
-                      >
-                        <img src={keplrIcon} className="w-5" alt="" />
-                      </Button>
+                    <Button
+                      variant={"secondary"}
+                      size={"icon"}
+                      onClick={() => connect({ connector: connectors[0] })}
+                    >
+                      <img src={metamaskIcon} className="w-5" alt="" />
+                    </Button>
                     </div>
                   </div>
                   <Button

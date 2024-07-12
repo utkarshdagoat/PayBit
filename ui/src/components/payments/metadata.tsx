@@ -16,18 +16,6 @@ export default function Metadata() {
   // TODO: Fetch the data and add skeleton in the meanwhile
   return (
     <>
-      <div className="w-full p-3 flex flex-col shadow-sm gap-2 text-xs mb-6 rounded-md bg-white/10">
-        {fields.map((field) => {
-          return (
-            <div className="flex gap-6 justify-between">
-              <p className="font-bold">{field.name}</p>{" "}
-              <p className="font-semibold">
-                {field.value} {field.unit}
-              </p>
-            </div>
-          );
-        })}
-      </div>
     </>
   );
 }

@@ -28,6 +28,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@stripe/react-stripe-js": "^2.7.1",
     "@stripe/stripe-js": "^3.4.0",
+    "@tanstack/react-query": "^5.51.1",
     "@uploadthing/react": "^6.5.4",
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
@@ -44,6 +45,8 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^6.10.4",
+    "viem": "^2.17.3",
+    "wagmi": "^2.10.10",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

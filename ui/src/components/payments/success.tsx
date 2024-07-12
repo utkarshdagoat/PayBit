@@ -3,7 +3,7 @@ import { useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
 import { useToast } from "../ui/use-toast";
 import axios from "axios";
-import { convertToCosmosAPI, convertToOSMOAPI } from "@/lib/endpoints";
+import {TESTNET_PAYMENT_API } from "@/lib/endpoints";
 import { Check } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -11,22 +11,32 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ClipboardDocumentListIcon } from "@heroicons/react/16/solid";
 import { Link } from "react-router-dom";
+import { useAccount } from "wagmi";
+const EXCHANGE_RATE_API = import.meta.env.VITE_EXCHANGE_RATE_API;
+const dataFetch = async () => {
+  const res = await axios.get(EXCHANGE_RATE_API);
+  const data = await res.data;
+  return data;
+};
+
 
 export default function SuccessfulPayment() {
   const stripe = useStripe();
   const { toast } = useToast();
-  const [burnTxHash, setBurnTxHash] = useState("");
-  const [osmoHash, setOsmoHash] = useState("");
+  const [txHash, setTxHash] = useState("");
   const [successful, setSuccessful] = useState(false);
-  const [osmoSuccess, setOsmoSuccess] = useState(false);
   const [callCounter, setCallCounter] = useState(0);
-
-  const cryptoCall = async (amount: number) => {
+  const {address} = useAccount();
+  const transferCall = async (amountInUsd: number) => {
+    const data = await dataFetch();
+    const price = data.data.price;
+    const amount = amountInUsd / price;
     try {
       const res = await axios.post(
-        convertToCosmosAPI,
+        TESTNET_PAYMENT_API,
         {
           amount,
+          address
         },
         {
           withCredentials: true,
@@ -34,38 +44,15 @@ export default function SuccessfulPayment() {
       );
 
       if (res.status === 200) {
-        setBurnTxHash(res.data.data.txhash);
+        setTxHash(res.data.data);
         setSuccessful(true);
-        toast({ description: "Reached the Cosmos network 🚀" });
-        try {
-          const omsoRes = await axios.post(
-            convertToOSMOAPI,
-            {},
-            {
-              withCredentials: true,
-            },
-          );
-
-          if (omsoRes.status === 200) {
-            setOsmoSuccess(true);
-            console.log(res.data.data);
-            setOsmoHash(res.data.data.txhash);
-            toast({ description: "Converted to OSMO 🌌" });
-          }
-        } catch (error) {
-          console.error(error);
-          toast({
-            description:
-              "Error converting to OSMO. Don't worry we will refund you within 24hrs if the transaction does not Happen",
-            variant: "destructive",
-          });
-        }
+        toast({ description: "USC Should be recived 🚀" });
       }
     } catch (err) {
       console.error(err);
       toast({
         description:
-          "Error converting to Cosmos. Don't worry we will refund you within 24hrs if the transaction does not Happen",
+          "Error converting to UIBIT. Don't worry we will refund you within 24hrs if the transaction does not Happen",
         variant: "destructive",
       });
     }
@@ -89,7 +76,7 @@ export default function SuccessfulPayment() {
             case "succeeded":
               toast({ description: "Payment succeeded! Converting to Crypto" });
               if (callCounter === 0) {
-                await cryptoCall(paymentIntent.amount / 100);
+                await transferCall(paymentIntent.amount / 100);
                 setCallCounter(1);
               }
               break;
@@ -136,13 +123,13 @@ export default function SuccessfulPayment() {
               <div className="flex mb-4 gap-2 items-end">
                 <div className="flex-1">
                   <Label htmlFor="burnTxHash">Burn Tx Hash</Label>
-                  <Input id="burnTxHash" value={burnTxHash} />
+                  <Input id="burnTxHash" value={"https://testnet.ubitscan.io/tx/"+txHash} />
                 </div>
                 <Button
                   variant={"outline"}
                   size={"icon"}
                   onClick={() => {
-                    navigator.clipboard.writeText(burnTxHash);
+                    navigator.clipboard.writeText("https://testnet.ubitscan.io/tx/"+txHash);
                     toast({
                       description: "Copied to clipboard",
                     });
@@ -151,26 +138,6 @@ export default function SuccessfulPayment() {
                   <ClipboardDocumentListIcon className="w-4 h-4" />
                 </Button>
               </div>
-              {osmoSuccess && (
-                <>
-                  <div className="flex mb-1 gap-2 items-end">
-                    <div className="flex-1">
-                      <Label htmlFor="osmosisTxHash">Osmosis Tx Hash</Label>
-                      <Input id="osmosisTxHash" value={burnTxHash} />
-                    </div>
-                    <Button variant={"outline"} size={"icon"}>
-                      <ClipboardDocumentListIcon className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <Link
-                    to={"https://www.mintscan.io/noble-testnet/tx/" + osmoHash}
-                    target="_blank"
-                    className="text-sm underline text-muted-foreground ml-2 font-medium"
-                  >
-                    See your osmo transaction at miniscan
-                  </Link>
-                </>
-              )}
             </CardContent>
           </Card>
           <Link to="/">

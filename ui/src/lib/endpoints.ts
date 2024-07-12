@@ -15,6 +15,8 @@ export const verifyOtpAPI = api + "/otp/verify";
 export const getUserAPI = api + "/user";
 export const createKYC = api + "/kyc/create";
 export const getKYCStatusAPI = api + "/kyc/status";
-export const convertToCosmosAPI = api + "/make-payment/transfer-to-cosmos"
-export const convertToOSMOAPI = api + "/make-payment/transfer-to-osmo"
 export const DASHBOARD_API = api + '/dashboard/applications'
+
+
+export const MAINNET_PAYMENT_API = api + "/api/make-payment/mainnet";
+export const TESTNET_PAYMENT_API = api + "/api/make-payment/testnet";
