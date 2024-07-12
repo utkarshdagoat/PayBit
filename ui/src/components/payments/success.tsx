@@ -77,7 +77,7 @@ export default function SuccessfulPayment() {
             case "succeeded":
               toast({ description: "Payment succeeded! Converting to Crypto" });
               if (callCounter === 0) {
-                await transferCall(paymentIntent.amount / 1000);
+                await transferCall(paymentIntent.amount / 10000);
                 setCallCounter(1);
               }
               break;

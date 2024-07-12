@@ -60,7 +60,7 @@ model application {
   description String
   clientSecret String @unique
   appId String @default(uuid()) @unique
-  creator User @relation(fields: [creatorId], references: [id])
+  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   creatorId Int
   createdAt DateTime @default(now())
 }
@@ -81,6 +81,6 @@ model Transaction {
   amount Float
   walletAddress String
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id],onDelete: Cascade)
   createdAt DateTime @default(now())
 }

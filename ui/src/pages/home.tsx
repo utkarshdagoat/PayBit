@@ -25,6 +25,7 @@ export default function Home() {
         if (res.status === 403) {
           setUser(null);
         } else if (res.status === 200) {
+          console.log(res.data);
           setUser(res.data);
         } else {
           setUser(null);
