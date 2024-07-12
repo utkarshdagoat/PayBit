@@ -82,7 +82,7 @@ export default function Exchange() {
         } else if (res.data.data === "INPROCESS") {
           setKycApproved(false);
           setKycSubmitted(true);
-        } else {
+        } else if(res.data.data === "APPROVED") {
           setKycApproved(true);
           setKycSubmitted(true);
         }
@@ -123,6 +123,10 @@ export default function Exchange() {
       console.log(data.clientSecret);
       setClientSecret(data.clientSecret);
     } catch (error) {
+      toast({
+        description: "Error creating payment intent. Please try again later.Ensure your KYC is Approved" ,
+        variant: "destructive",
+        });
       console.error("Error creating payment intent:", error);
     } finally {
       setPaymentClickedLoading(false);
