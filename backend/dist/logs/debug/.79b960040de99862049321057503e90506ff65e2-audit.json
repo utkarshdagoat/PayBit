@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 30
+    },
+    "auditLog": "/home/utkarsh/dev/ubit/temp_paybit/backend/dist/logs/debug/.79b960040de99862049321057503e90506ff65e2-audit.json",
+    "files": [
+        {
+            "date": 1721906000881,
+            "name": "/home/utkarsh/dev/ubit/temp_paybit/backend/dist/logs/debug/2024-07-25.log",
+            "hash": "a12dafb5cdf1d449cc0be2d8fbb4b7833989f06a274664275dec05937161701a"
+        }
+    ],
+    "hashType": "sha256"
+}
