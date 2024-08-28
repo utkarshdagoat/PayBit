@@ -1,6 +1,6 @@
 # NodeJS Version 16
-FROM node:16.18-buster-slim
-
+FROM node:20-buster-slim
+RUN apt-get update -y && apt-get install -y openssl
 # Copy Dir
 COPY . ./app
 
@@ -11,9 +11,7 @@ WORKDIR /app
 RUN npm install --legacy-peer-deps
 
 # Set Env
-ENV NODE_ENV production
-
-EXPOSE 3000
+ENV NODE_ENV development
 
 # Cmd script
 CMD ["npm", "run", "start"]
